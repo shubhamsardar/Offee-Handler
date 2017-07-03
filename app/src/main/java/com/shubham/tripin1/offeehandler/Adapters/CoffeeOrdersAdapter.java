@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
-import com.shubham.tripin1.officehandleruser.Model.MyOrder;
-import com.shubham.tripin1.officehandleruser.holders.OrderListHolder;
+import com.shubham.tripin1.offeehandler.Model.MyOrder;
+import com.shubham.tripin1.offeehandler.holders.OrderListHolder;
 
 /**
  * Created by Tripin1 on 6/20/2017.

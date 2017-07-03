@@ -13,6 +13,14 @@ public class CoffeeOrder {
         //for firebase
     }
 
+
+
+    public CoffeeOrder(String mCoffeeName,String mCoffeeNumber,String mOrderStatus){
+        this.mCoffeeName = mCoffeeName;
+        this.mCoffeeNumber = mCoffeeNumber;
+        this.mOrderStatus = mOrderStatus;
+    }
+
     public String getmCoffeeName() {
         return mCoffeeName;
     }
