@@ -1,5 +1,6 @@
 package com.shubham.tripin1.offeehandler;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
@@ -25,16 +26,20 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.shubham.tripin1.offeehandler.Adapters.MiniOrderAdapter;
 import com.shubham.tripin1.offeehandler.Managers.SharedPrefManager;
 import com.shubham.tripin1.offeehandler.Model.CoffeeOrder;
 import com.shubham.tripin1.offeehandler.Model.MyOrder;
+import com.shubham.tripin1.offeehandler.Model.PostPaidPojo;
 import com.shubham.tripin1.offeehandler.Utils.CircleTransform;
 import com.shubham.tripin1.offeehandler.holders.OrderListHolder;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -51,13 +56,15 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseRecyclerAdapter firebaseRecyclerAdapterOrders;
-    private DatabaseReference ref;
+    private DatabaseReference ref, refCompletedOrders;
     private Context mContext;
     private RecyclerView mRecyclarOrders;
     private StorageReference storageReference;
     private SharedPrefManager mSharedPref;
     AVLoadingIndicatorView indicatorView;
     private boolean isOnScreen = false;
+    DatabaseReference refHistory;
+
 
 
 
@@ -67,12 +74,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = this;
         mSharedPref = new SharedPrefManager(mContext);
-        isOnScreen = true;
 
 
-        if (mSharedPref.getUserHpass().isEmpty()) {
-            startActivity(new Intent(mContext, RagActivity.class));
+        if(mSharedPref.getUserHpass().isEmpty()){
+            startActivity(new Intent(this,SplashActivity.class));
+            finish();
+        }else {
+            FirebaseMessaging.getInstance().subscribeToTopic(mSharedPref.getUserHpass());
         }
+
+
 
         initView();
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -80,6 +91,23 @@ public class MainActivity extends AppCompatActivity {
 
         ref = FirebaseDatabase.getInstance().getReference()
                 .child(mSharedPref.getUserHpass()).child("orders");
+        refCompletedOrders = FirebaseDatabase.getInstance().getReference()
+                .child(mSharedPref.getUserHpass()).child("corders");
+        refHistory = FirebaseDatabase.getInstance().getReference().child("history");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount()!=0){
+                    indicatorView.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         firebaseRecyclerAdapterOrders = new FirebaseRecyclerAdapter<MyOrder, OrderListHolder>(MyOrder.class, R.layout.item_mainorder, OrderListHolder.class, ref) {
@@ -90,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
                 viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
                 viewHolder.recyclerView.setAdapter(miniOrderAdapter);
                 viewHolder.mTxtUserName.setText(model.getmUserName());
-                viewHolder.mTxtTimeAgo.setText(gettimeDiff(model.getmTimeAgo()));
+                if(model.getmTimeAgo()!=null)
+                viewHolder.mTxtTimeAgo.setText(gettimeDiff(model.getmTimeAgo())+", ₹"+model.getOrderCost());
                 miniOrderAdapter.notifyDataSetChanged();
                 MyOrder myOrder = model;
 
@@ -106,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 firebaseRecyclerAdapterOrders.getRef(position).setValue(myOrder);
+                indicatorView.setVisibility(View.INVISIBLE);
+
 
 
             }
@@ -120,8 +151,42 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition(); //get position which is swipe
+                firebaseRecyclerAdapterOrders.getRef(position).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final MyOrder myOrder = dataSnapshot.getValue(MyOrder.class);
+                        refHistory.push().setValue(myOrder);
+                        refCompletedOrders.child(myOrder.getmUserMobile()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                PostPaidPojo postPaidPojo = dataSnapshot.getValue(PostPaidPojo.class);
+                                if(postPaidPojo != null){
+                                    double d = postPaidPojo.getAmount();
+                                    postPaidPojo.setAmount(d+myOrder.getOrderCost());
+                                    refCompletedOrders.child(myOrder.getmUserMobile()).setValue(postPaidPojo);
+                                }else {
+                                    postPaidPojo = new PostPaidPojo(myOrder.getmUserName(),myOrder.getOrderCost(),myOrder.getmUserMobile());
+                                    refCompletedOrders.child(myOrder.getmUserMobile()).setValue(postPaidPojo);
+                                }
 
-                firebaseRecyclerAdapterOrders.getRef(position).removeValue(new DatabaseReference.CompletionListener() {
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                        firebaseRecyclerAdapterOrders.getRef(position).removeValue(new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                         Toast.makeText(mContext,"Order Completed!",Toast.LENGTH_SHORT).show();
@@ -138,32 +203,6 @@ public class MainActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclarOrders); //set swipe to recylcerview
 
-        firebaseRecyclerAdapterOrders.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                indicatorView.setVisibility(View.INVISIBLE);
-
-                if(!isOnScreen){
-                    startActivity(new Intent(MainActivity.this,MainActivity.class));
-                    finish();
-                }
-
-                try {
-                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                    if(!r.isPlaying())
-                    r.play();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-                mRecyclarOrders.smoothScrollToPosition(mRecyclarOrders.getAdapter().getItemCount());
-
-            }
-
-        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
@@ -175,6 +214,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        isOnScreen = true;
+        NotificationManager mNotificationManager = (NotificationManager)
+                getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager.cancelAll();
+
 
 
     }
@@ -207,9 +251,11 @@ public class MainActivity extends AppCompatActivity {
             }
             case R.id.action_settings: {
                 startActivity(new Intent(this, RagActivity.class));
+                finish();
                 break;
             }
-            case R.id.action_gotit: {
+            case R.id.action_postpaid: {
+                startActivity(new Intent(this, PostPaid.class));
                 break;
             }
         }

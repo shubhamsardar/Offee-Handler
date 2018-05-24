@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "83725032567",
-    "firebase_url": "https://officehandler-54ecb.firebaseio.com",
-    "project_id": "officehandler-54ecb",
-    "storage_bucket": "officehandler-54ecb.appspot.com"
+    "project_number": "1055414048466",
+    "firebase_url": "https://offeeapp.firebaseio.com",
+    "project_id": "offeeapp",
+    "storage_bucket": "offeeapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:83725032567:android:51f8459f8a2d2a82",
+        "mobilesdk_app_id": "1:1055414048466:android:1809ea01e79774c3",
         "android_client_info": {
-          "package_name": "com.shubham.tripin1.officehandleruser"
+          "package_name": "com.shubham.tripin1.offeehandler"
         }
       },
       "oauth_client": [
         {
-          "client_id": "83725032567-66pde1l5v10r18r493eugmrd0h8ubpla.apps.googleusercontent.com",
+          "client_id": "1055414048466-140om1087m5dejvbcb6a7ei4o7ep7q32.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.shubham.tripin1.officehandleruser",
-            "certificate_hash": "107d9f36a7563117685afe93cf15ce58240a0432"
+            "package_name": "com.shubham.tripin1.offeehandler",
+            "certificate_hash": "1a6ad4cc4156b072b5188d76981b8fe119e3fb69"
           }
         },
         {
-          "client_id": "83725032567-1hj8ciauilcvtjl9p7aa1clumeg8mhth.apps.googleusercontent.com",
+          "client_id": "1055414048466-ba8ia8lmofa8jsimhaf9dt7o1clitrfi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBTpRnUxyjkUnZZZicqzKE5WAOGACb9nBQ"
+          "current_key": "AIzaSyAlQPgcUIZrwJrzomo9bIt5Ru9vnAJ34tE"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "83725032567-1hj8ciauilcvtjl9p7aa1clumeg8mhth.apps.googleusercontent.com",
+              "client_id": "1055414048466-ba8ia8lmofa8jsimhaf9dt7o1clitrfi.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -52,28 +52,28 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:83725032567:android:1809ea01e79774c3",
+        "mobilesdk_app_id": "1:1055414048466:android:f2b715ec176e074b",
         "android_client_info": {
-          "package_name": "com.shubham.tripin1.offeehandler"
+          "package_name": "in.co.tripin.offeeuser"
         }
       },
       "oauth_client": [
         {
-          "client_id": "83725032567-uel87kki4kabadcvv8mjah32dkpmbq1h.apps.googleusercontent.com",
+          "client_id": "1055414048466-ei02biqus6k4251njlb6kppq8q5mimtq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.shubham.tripin1.offeehandler",
-            "certificate_hash": "107d9f36a7563117685afe93cf15ce58240a0432"
+            "package_name": "in.co.tripin.offeeuser",
+            "certificate_hash": "1a6ad4cc4156b072b5188d76981b8fe119e3fb69"
           }
         },
         {
-          "client_id": "83725032567-1hj8ciauilcvtjl9p7aa1clumeg8mhth.apps.googleusercontent.com",
+          "client_id": "1055414048466-ba8ia8lmofa8jsimhaf9dt7o1clitrfi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBTpRnUxyjkUnZZZicqzKE5WAOGACb9nBQ"
+          "current_key": "AIzaSyAlQPgcUIZrwJrzomo9bIt5Ru9vnAJ34tE"
         }
       ],
       "services": {
@@ -84,7 +84,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "83725032567-1hj8ciauilcvtjl9p7aa1clumeg8mhth.apps.googleusercontent.com",
+              "client_id": "1055414048466-ba8ia8lmofa8jsimhaf9dt7o1clitrfi.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

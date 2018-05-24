@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.shubham.tripin1.offeehandler.RagActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textViewScanQr"
+        android:layout_margin="20dp" />
+
     <TextView
         android:id="@+id/textViewCurrentPass"
         android:layout_width="wrap_content"
@@ -13,8 +20,7 @@
         android:layout_alignLeft="@+id/editTextCrateHpass"
         android:layout_alignStart="@+id/editTextCrateHpass"
         android:layout_below="@+id/editTextCrateHpass"
-        android:layout_marginTop="19dp"
-        android:text="TextView" />
+        android:layout_marginTop="19dp" />
 
     <EditText
         android:id="@+id/editTextCrateHpass"
@@ -54,4 +60,14 @@
         android:textAllCaps="true"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewGenerating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="161dp"
+        android:text="Generating QR"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -8,6 +8,8 @@ public class CoffeeOrder {
     private String mCoffeeName;
     private String mCoffeeNumber;
     private String mOrderStatus;
+    private String mItemPrice;
+
 
     public CoffeeOrder(){
         //for firebase
@@ -15,10 +17,11 @@ public class CoffeeOrder {
 
 
 
-    public CoffeeOrder(String mCoffeeName,String mCoffeeNumber,String mOrderStatus){
+    public CoffeeOrder(String mCoffeeName,String mCoffeeNumber,String mOrderStatus,String mItemPrice){
         this.mCoffeeName = mCoffeeName;
         this.mCoffeeNumber = mCoffeeNumber;
         this.mOrderStatus = mOrderStatus;
+        this.mItemPrice = mItemPrice;
     }
 
     public String getmCoffeeName() {
@@ -43,6 +46,14 @@ public class CoffeeOrder {
 
     public void setmOrderStatus(String mOrderStatus) {
         this.mOrderStatus = mOrderStatus;
+    }
+
+    public String getmItemPrice() {
+        return mItemPrice;
+    }
+
+    public void setmItemPrice(String mItemPrice) {
+        this.mItemPrice = mItemPrice;
     }
 
 

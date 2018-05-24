@@ -10,17 +10,27 @@ public class MyOrder {
     private List<CoffeeOrder> mOrderList;
     private String mUserName;
     private String mUserMobile;
+    private String mUserUid;
     private String mTimeAgo;
 
     public MyOrder(){
         //for firebase
     }
 
-    public MyOrder(String mUserName , String mUserMobile , List<CoffeeOrder> mOrderList,String mTimeAgo){
+    public MyOrder(String mUserName , String mUserMobile , List<CoffeeOrder> mOrderList,String mTimeAgo, String mUserUid){
         this.mOrderList = mOrderList;
         this.mUserName = mUserName;
         this.mUserMobile = mUserMobile;
         this.mTimeAgo = mTimeAgo;
+        this.mUserUid = mUserUid;
+    }
+
+    public String getmUserUid() {
+        return mUserUid;
+    }
+
+    public void setmUserUid(String mUserUid) {
+        this.mUserUid = mUserUid;
     }
 
     public List<CoffeeOrder> getmOrderList() {
@@ -53,5 +63,15 @@ public class MyOrder {
 
     public void setmTimeAgo(String mTimeAgo) {
         this.mTimeAgo = mTimeAgo;
+    }
+
+    public double getOrderCost(){
+        double totalcost = 0;
+        for(CoffeeOrder coffeeOrder : getmOrderList()){
+            double n = Double.parseDouble(coffeeOrder.getmCoffeeNumber());
+            double p = Double.parseDouble(coffeeOrder.getmItemPrice());
+            totalcost = totalcost + (p*n) ;
+        }
+        return totalcost;
     }
 }

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseError;
@@ -52,6 +53,12 @@ public class ItemsActivity extends AppCompatActivity {
             protected void populateViewHolder(ItemAddedHolder viewHolder, CoffeeOrder model, final int position) {
 
                 viewHolder.getmName().setText(model.getmCoffeeName());
+                if(model.getmItemPrice().equalsIgnoreCase("0")){
+                    viewHolder.getmPrice().setText("Free");
+                }else {
+                    viewHolder.getmPrice().setText("₹"+model.getmItemPrice());
+                }
+
                 viewHolder.getmRemove().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -98,13 +105,26 @@ public class ItemsActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
 
         final EditText edt = (EditText) dialogView.findViewById(R.id.editTextItemName);
+        final EditText edt2 = (EditText) dialogView.findViewById(R.id.editTextPrise);
+
 
         dialogBuilder.setTitle("Add new Item!");
         dialogBuilder.setMessage("Enter whats available, anything new!");
         dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                ref.push().setValue(new CoffeeOrder(edt.getText().toString().trim(),"0","UnOrdered"));
-                firebaseRecyclerAdapter.notifyDataSetChanged();
+                String price = "0";
+                if(!edt2.getText().toString().isEmpty()){
+                    price = edt2.getText().toString().trim();
+                }
+                if(!edt.getText().toString().isEmpty()){
+                    ref.push().setValue(new CoffeeOrder(edt.getText().toString().trim(),"0","UnOrdered",price));
+                    firebaseRecyclerAdapter.notifyDataSetChanged();
+                    Toast.makeText(mContext,"Added Successfully!",Toast.LENGTH_LONG).show();
+
+                }else {
+                    Toast.makeText(mContext,"It was invalid entry!",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="items"
+        android:id="@+id/action_items"
+        android:icon="@drawable/ic_playlist_add_black_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item
+        android:title="settings"
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:orderInCategory="90"
+        app:showAsAction="always"/>
+    <item
+        android:title="postpaid"
+        android:id="@+id/action_postpaid"
+        android:icon="@drawable/ic_monetization_on_black_24dp"
+        android:orderInCategory="80"
+        app:showAsAction="always"/>
+</menu>
